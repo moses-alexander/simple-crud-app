@@ -18,8 +18,9 @@ instance ToJSON Inp
 instance FromJSON Inp
 
 -- define api types
-type Api' =
-    Get '[JSON] [Inp]
+type Api'
+    = Get '[JSON] [Inp] 
+    -- 
 
 -- stores api type info so Servant can distinguish btwn api types
 proxy' :: Proxy Api'
@@ -34,8 +35,8 @@ getAll = return [emptyInp, emptyInp]
 emptyInp :: Inp
 emptyInp = Inp "."
 
-app' :: Application
+app' :: Application -- takes apis as param, produces wai app
 app' = serve proxy' apiServer
 
-run' :: Int -> IO ()
+run' :: Int -> IO () -- runs wai app on the port passed as param
 run' port = run port app'
