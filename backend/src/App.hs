@@ -12,7 +12,7 @@ import Network.Wai.Handler.Warp
 import Servant
 import System.IO
 
-data Inp = Inp String deriving (Eq, Show, Generic)
+newtype Inp = Inp String deriving (Eq, Show, Generic)
 
 instance ToJSON Inp
 instance FromJSON Inp
@@ -26,11 +26,11 @@ type Api'
 proxy' :: Proxy Api'
 proxy' = Proxy
 
-apiServer :: Server Api' -- get an item or retrieve somn by id
+apiServer :: Server Api' -- get an item
 apiServer = getAll
 
 getAll :: Handler [Inp]
-getAll = return [emptyInp, emptyInp]
+getAll = return [emptyInp, Inp "0"]
 
 emptyInp :: Inp
 emptyInp = Inp "."
