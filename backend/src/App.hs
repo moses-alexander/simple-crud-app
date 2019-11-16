@@ -12,37 +12,30 @@ import Network.Wai.Handler.Warp
 import Servant
 import System.IO
 
-data Loc = Loc { locId :: Integer
-                , locName :: String
-                } deriving (Eq, Show, Generic)
--- define some api types
-type LocApi =
-    "Location" :> Get '[JSON] [Loc] :<|>
-    "Location" :> Capture "id" Integer :> Get '[JSON] Loc
+data Inp = Inp String deriving (Eq, Show, Generic)
+
+instance ToJSON Inp
+instance FromJSON Inp
+
+-- define api types
+type Api' =
+    Get '[JSON] [Inp]
 
 -- stores api type info so Servant can distinguish btwn api types
-proxy' :: Proxy LocApi
+proxy' :: Proxy Api'
 proxy' = Proxy
 
-apiServer :: Server LocApi -- get an item or retrieve somn by id
-apiServer = getLocs :<|> getLocById
+apiServer :: Server Api' -- get an item or retrieve somn by id
+apiServer = getAll
 
-getLocs :: Handler [Loc]
-getLocs = return [emptyLoc]
+getAll :: Handler [Inp]
+getAll = return [emptyInp, emptyInp]
 
-getLocById :: Integer -> Handler Loc
-getLocById x = case x of
-                    0 -> return emptyLoc
-                    _ -> throwError err404
+emptyInp :: Inp
+emptyInp = Inp "."
 
-emptyLoc :: Loc
-emptyLoc = Loc 0 "."
-
-instance ToJSON Loc
-instance FromJSON Loc
-
-app :: Application
-app = serve proxy' apiServer
+app' :: Application
+app' = serve proxy' apiServer
 
 run' :: Int -> IO ()
-run' x = run x app
+run' port = run port app'
