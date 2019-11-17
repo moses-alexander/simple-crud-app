@@ -20,7 +20,6 @@ instance FromJSON Inp
 -- define api types
 type Api' = Get '[JSON] [Inp] 
 
-
 -- stores api type info so Servant can distinguish btwn api types
 proxy' :: Proxy Api'
 proxy' = Proxy
