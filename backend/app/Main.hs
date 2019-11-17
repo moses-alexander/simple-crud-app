@@ -3,4 +3,4 @@ module Main where
 import App
 
 main :: IO ()
-main = run' 8080
+main = run' 8081

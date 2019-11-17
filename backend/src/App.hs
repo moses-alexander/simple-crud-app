@@ -12,25 +12,24 @@ import Network.Wai.Handler.Warp
 import Servant
 import System.IO
 
-newtype Inp = Inp String deriving (Eq, Show, Generic)
+data Inp = Inp String deriving (Eq, Show, Generic)
 
 instance ToJSON Inp
 instance FromJSON Inp
 
 -- define api types
-type Api'
-    = Get '[JSON] [Inp] 
-    -- 
+type Api' = Get '[JSON] [Inp] 
+
 
 -- stores api type info so Servant can distinguish btwn api types
 proxy' :: Proxy Api'
 proxy' = Proxy
 
-apiServer :: Server Api' -- get an item
+apiServer :: Server Api' -- get an item or retrieve somn by id
 apiServer = getAll
 
 getAll :: Handler [Inp]
-getAll = return [emptyInp, Inp "0"]
+getAll = return [emptyInp, Inp $ "hello world"]
 
 emptyInp :: Inp
 emptyInp = Inp "."
